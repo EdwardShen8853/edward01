@@ -1,3 +1,6 @@
+  "\n",
+    "\n",
+    "\n",
  "# Hash table 原理\n",
     "## Hash table\n",
     "hash table 是一個資料結構，用來儲存一對 keys & value 。他使用 hash function 將 key 轉換成 array 對應的位置(index) 。而該位置就是用來儲存 value 的。\n",
