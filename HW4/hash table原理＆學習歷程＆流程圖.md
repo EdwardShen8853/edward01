@@ -1,63 +1,19 @@
-  {
- "cells": [
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# HW4:Hash Table"
-   ]
-  },
-    "hash table 是一個資料結構，用來儲存一對 keys & value 。他使用 hash function 將 key 轉換成 array 對應的位置(index) 。而該位置就是用來儲存 value 的。\n",
-    "使用的 hash function 好壞是 hash table 關鍵。 在一般情況下，hash table 搜尋特定的物件的時間複雜度平均為 O(1).\n",
-    "\n",
-    "\n",
-    "![](https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Hash_table_3_1_1_0_1_0_0_SP.svg/473px-Hash_table_3_1_1_0_1_0_0_SP.svg.png)\n",
-    "\n",
-    "將特定字串轉換得到特定編號，並存到對應位置的資料結構，hash table 由下列三者組成：\n",
-    "\n",
-    "- keys\n",
-    "  - 作為獨立的索引，通常為字串，也就是應用端輸入的東西。\n",
-    "- hash function\n",
-    "  - 通過某些算式或是方法，將 keys 轉換成能對應特定的 index 的。\n",
-    "  - 他的設計理念是一個key會有對應的且獨立的 bucket，但是目前大多數的設計都會有碰撞問題，也就是不同的 keys 經過轉換後會對應到一樣的 bucket。\n",
-    "- bucket\n",
-    "  - 他是一個 array ，有多個位置可以儲存資料，在裡面可以是空的可以存一筆資料，甚至也可以放其它資料結構，例如：linked-list\n",
-    "\n",
-    "## hashing\n",
-    "hashing 他是一種在一群體中，辨識特定物件的技術，再現實生活中:\n",
-    "1. 在學校裡，每位學生都有特定的編號，這編號可以用來查詢他的相關資料。\n",
-    "2. 在圖書館裡，每本書都有一個特別編號，紀錄與該書本相關的資訊，像是類別、借還書資料 之類的...\n",
-    "\n",
-    "上述兩種情況都會需要有特別編碼(unique number)。簡單來講就是他是一個將 key 轉成 index 的工作。而要如何用程式去實現呢? 我們把輸入值(str)當作 key ，然後透過 MD5 的 hexdigest() 將字串轉換成 16 進位的格式，在透過 hash function 轉換成對應的 index 。\n",
-    "\n",
-    "最簡單的方式就是直接取餘數作為 index\n",
-    "```python=\n",
-    "hash = hashfunc(key)\n",
-    "index = hash % array_size\n",
-    "```\n",
-    "## Hash function\n",
-    "hash function 可以把不規則的資料(像是字串)轉成特定index(在有限的 array_size 下) 然後會存入 hash table。從 hash function 出來的值稱作 hash values、hash codes、hash sums 或是 simply hashes。\n",
-    "\n",
-    "一個好的 hashing 機制 ，需要一個好的 hash function ，他有以下幾個特點\n",
-    "\n",
-    "- easy to computing (很好計算): 他不是一個複雜的演算法，必須能夠簡單快速的轉換。\n",
-    "\n",
-    "- Uniform distribution (均勻分布): 他必須均勻分布，不要只偏向某格群體(index)，這樣會影響 hash table 的效率.\n",
-    "\n",
-    "- Less collisions (少碰撞):碰撞就是有兩個 key 會對應到同個 hash value(index)，這是要避免的。\n",
-    "\n",
-    "Note: 幾乎所有 hash function 都會有碰撞(Collision)問題，所以在做 hash table 時要注意如果發生碰撞要如何處理。\n",
-    "## Collision Handling\n",
-    "![](https://he-s3.s3.amazonaws.com/media/uploads/2cabd32.jpg)\n",
-    "\n",
-    "\n",
-    "因為 array（容量） 不是無限的， 所以我們要在有限的空間裡，存取特定值。也就是 在我們的 hash table 裡會有 array_size(capacity)，用來限制 array 的大小，那如果不同的字串對應同個 index 依樣怎麼辦?? 也就是同個 key 在hashing 時有衝突(Collision) ，這時就可以使用 linked-List 也就是在hash table 裡面放 linked-List，只要 index 一樣我們就可以把 value 一直往後堆疊在透過在節點裡設置對應的另一個 key 作為辨識，但是當我們的 array_size 太小就會像是 linked-List 了。\n",
-    "\n",
-    "![](https://he-s3.s3.amazonaws.com/media/uploads/0e2c706.png)\n",
-    "\n",
-    "- Chaining: 將 hash table 的每個位置插入 linked-List ，但是他會使用更多而外的記憶體。\n",
-    "- Open Addressing: 所有物件都存在 hash table 中，也就是不管有幾個物件，每個都直接指派一個 空 index 去存取(key,value)。(類似 python 裡的 dict)\n",
-    "\n",
-    "![](https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/HASHTB12.svg/543px-HASHTB12.svg.png)\n",
-    "\n",
-    "---\n",
+ # Hash Table
+## Hash function 
+Hash Table希望能夠將存放資料的「Table」的大小(size)降到「真正會存放進Table的資料的數量」，也就是「有用到的Key的數量」：
+
+* 若有用到的Key之數量為n，Table的大小為m，那麼目標就是m=Θ(n)。
+要達到這個目標，必須引入Hash Function，將Key對應到符合Table大小m的範圍內，index=h(Key)，即可成為Hash Table的index。
+
+觀念圖（這裡的index就像是一個個的抽屜，依照你的編號進入你該去的抽屜裡。）
+
+![image](https://github.com/06170228/my-note/blob/master/Image/hash%20table%20%E8%A7%80%E5%BF%B5%E5%9C%96.png)
+
+
+
+## Hash table 學習歷程
+我們使用MD5，將一般文字轉換成一串亂碼，也就是key。key/5的餘數就是index的編號。依照編號放進去。
+
+我這邊是不會放入相同的值，所以不會重複，刪除的時候刪除一項即可。
+
+原本沒有想到重複值的問題，但若有重複值再刪除及查詢時很麻煩，所以改成若遇到重複值就不加入。
