@@ -1,1 +1,1 @@
-# edward01
+This is my college homework & master project
